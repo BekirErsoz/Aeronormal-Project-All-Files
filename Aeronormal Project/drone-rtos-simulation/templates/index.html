@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTOS LED Control Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body>
+    <h1>RTOS LED Control Simulation</h1>
+    <div class="controls">
+        <button onclick="controlLed('on')">LED On</button>
+        <button onclick="controlLed('off')">LED Off</button>
+        <button onclick="controlLed('toggle')">Toggle LED</button>
+        <p id="led-state">LED State: OFF</p>
+    </div>
+    <h2>Telemetry Data</h2>
+    <canvas id="telemetryChart" width="400" height="200"></canvas>
+    <canvas id="cpuUsageChart" width="400" height="200"></canvas>
+    <canvas id="memoryUsageChart" width="400" height="200"></canvas>
+    <canvas id="temperatureChart" width="400" height="200"></canvas>
+    <canvas id="humidityChart" width="400" height="200"></canvas>
+    <canvas id="batteryChart" width="400" height="200"></canvas>
+    <canvas id="networkChart" width="400" height="200"></canvas>
+</body>
+</html>

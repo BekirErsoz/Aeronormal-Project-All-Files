@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Real-Time Monitoring</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Drone Monitoring Dashboard</h1>
+        </header>
+        <main>
+            <div class="dashboard">
+                <div id="map"></div>
+                <div class="status-panel">
+                    <h2>Drone Status</h2>
+                    <ul>
+                        <li>Battery: <span id="battery">---</span>%</li>
+                        <li>Altitude: <span id="altitude">---</span> m</li>
+                        <li>Speed: <span id="speed">---</span> km/h</li>
+                        <li>Temperature: <span id="temperature">---</span> °C</li>
+                    </ul>
+                </div>
+                <div class="alerts-panel">
+                    <h2>Alerts</h2>
+                    <ul id="alerts">
+                        <!-- Alerts will be dynamically added here -->
+                    </ul>
+                </div>
+            </div>
+            <div class="control-panel">
+                <h2>Drone Control</h2>
+                <button onclick="sendCommand('takeoff')">Take Off</button>
+                <button onclick="sendCommand('land')">Land</button>
+                <button onclick="sendCommand('returnHome')">Return Home</button>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

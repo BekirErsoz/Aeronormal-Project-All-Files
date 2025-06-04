@@ -1,0 +1,5 @@
+Flask
+SQLAlchemy
+opencv-python
+tensorflow
+boto3

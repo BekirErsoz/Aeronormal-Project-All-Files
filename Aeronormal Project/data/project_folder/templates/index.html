@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Data Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+            justify-content: center; /* Center the navbar content */
+        }
+        .card-img-top {
+            max-height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .timestamp {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand mx-auto" href="#">AERON</a>
+    </nav>
+    <div class="container">
+        <h1 class="my-4 text-center">Drone Data Management System</h1>
+        <form id="process-form" class="text-center mb-4">
+            <button type="submit" class="btn btn-custom">Process Sample Image</button>
+        </form>
+        <h2 class="my-4">Processed Images</h2>
+        <div class="row" id="image-container">
+            {% for image in images %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ url_for('static', filename=image.filename) }}" class="card-img-top" alt="Processed Image">
+                    <div class="card-body">
+                        <p class="card-text">{{ image.filename }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="timestamp">{{ image.timestamp }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#process-form').on('submit', function(e) {
+                e.preventDefault();
+                $.post('/capture', function() {
+                    fetchImages();
+                });
+            });
+
+            function fetchImages() {
+                $.get('/get_images', function(data) {
+                    var imageContainer = $('#image-container');
+                    imageContainer.empty();
+                    data.forEach(function(image) {
+                        var imageCard = '<div class="col-md-4">' +
+                                        '<div class="card mb-4 shadow-sm">' +
+                                        '<img src="' + image.filename + '" class="card-img-top" alt="Processed Image">' +
+                                        '<div class="card-body">' +
+                                        '<p class="card-text">' + image.filename + '</p>' +
+                                        '<div class="d-flex justify-content-between align-items-center">' +
+                                        '<small class="timestamp">' + image.timestamp + '</small>' +
+                                        '</div></div></div></div>';
+                        imageContainer.append(imageCard);
+                    });
+                });
+            }
+
+            fetchImages();
+        });
+    </script>
+</body>
+</html>

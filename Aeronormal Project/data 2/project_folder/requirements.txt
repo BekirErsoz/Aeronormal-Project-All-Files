@@ -1,0 +1,6 @@
+opencv-python
+numpy
+sqlalchemy
+flask
+boto3
+tensorflow

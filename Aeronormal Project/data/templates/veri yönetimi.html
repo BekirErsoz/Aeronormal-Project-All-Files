@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drone Data Management</title>
+</head>
+<body>
+    <h1>Drone Data Management System</h1>
+    <form action="/capture" method="post">
+        <button type="submit">Capture Image</button>
+    </form>
+    <h2>Captured Images</h2>
+    <ul>
+        {% for image in images %}
+            <li>{{ image.filename }} - {{ image.timestamp }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

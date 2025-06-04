@@ -1,0 +1,51 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+#image-container .card {
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+#image-container .card:hover {
+    transform: scale(1.05);
+}

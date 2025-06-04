@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Data Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+            justify-content: center; /* Center the navbar content */
+        }
+        .card-img-top {
+            max-height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .timestamp {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand mx-auto" href="#">AERON</a>
+    </nav>
+    <div class="container">
+        <h1 class="my-4 text-center">Drone Data Management System</h1>
+        <form id="process-form" class="text-center mb-4">
+            <button type="submit" class="btn btn-custom">Process Sample Image</button>
+        </form>
+        <h2 class="my-4">Processed Images</h2>
+        <div class="row" id="image-container"></div>
+        <nav>
+            <ul class="pagination justify-content-center"></ul>
+        </nav>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var currentPage = 1;
+
+            $('#process-form').on('submit', function(e) {
+                e.preventDefault();
+                $.post('/capture', function() {
+                    fetchImages(1);  // Reset to first page after processing new image
+                });
+            });
+
+            function fetchImages(page) {
+                $.get('/get_images', { page: page }, function(data) {
+                    var imageContainer = $('#image-container');
+                    imageContainer.empty();
+                    data.forEach(function(image) {
+                        var imageCard = '<div class="col-md-4 fade-in">' +
+                                        '<div class="card mb-4 shadow-sm">' +
+                                        '<img src="' + image.filename + '" class="card-img-top" alt="Processed Image">' +
+                                        '<div class="card-body">' +
+                                        '<p class="card-text">' + image.filename + '</p>' +
+                                        '<div class="d-flex justify-content-between align-items-center">' +
+                                        '<small class="timestamp">' + image.timestamp + '</small>' +
+                                        '</div></div></div></div>';
+                        imageContainer.append(imageCard);
+                    });
+                    updatePagination(page);
+                });
+            }
+
+            function updatePagination(currentPage) {
+                $.get('/total_pages', function(data) {
+                    var totalPages = data.total_pages;
+                    var pagination = $('.pagination');
+                    pagination.empty();
+                    for (var i = 1; i <= totalPages; i++) {
+                        var activeClass = (i === currentPage) ? 'active' : '';
+                        var pageItem = '<li class="page-item ' + activeClass + '">' +
+                                       '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                                       '</li>';
+                        pagination.append(pageItem);
+                    }
+                });
+            }
+
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                currentPage = $(this).data('page');
+                fetchImages(currentPage);
+            });
+
+            fetchImages(currentPage);  // Initial load
+        });
+    </script>
+</body>
+</html>
